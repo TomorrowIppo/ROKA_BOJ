@@ -7,9 +7,9 @@ int n, m;
 int cycle_cnt = 0;
 char order[MAX][MAX];       // 위치에 따른 이동을 저장
 int board[MAX][MAX];          // 위치의 번호 저장
-int graph[MAX];             // 위치의 번호를 바탕으로 그래프 구현
-bool vis[MAX];              // 방문 여부 저장
-bool done[MAX];             // 사이클 끝났는지 판단하는 변수
+int graph[MAX * MAX];             // 위치의 번호를 바탕으로 그래프 구현
+bool vis[MAX * MAX];              // 방문 여부 저장
+bool done[MAX * MAX];             // 사이클 끝났는지 판단하는 변수
 
 void makeGraph();           // 조건에 만족하는 그래프 생성
 void findCycle(int node);    // cycle 찾기 
