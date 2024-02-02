@@ -5,7 +5,7 @@ using namespace std;
 
 int n, m;
 int cycle_cnt = 0;
-vector<string> order;       // 위치에 따른 이동을 저장
+char order[MAX][MAX];       // 위치에 따른 이동을 저장
 int board[MAX][MAX];          // 위치의 번호 저장
 int graph[MAX];             // 위치의 번호를 바탕으로 그래프 구현
 bool vis[MAX];              // 방문 여부 저장
@@ -24,11 +24,14 @@ int main()
     {
         string tmp;
         cin >> tmp;
-        order.push_back(tmp);
+        for(int j = 1; j <= m; j++)
+        {
+            order[i][j] = tmp[j - 1];
+        }
     }
     makeGraph();
     
-    for(int i = 1; i <= n; i++)
+    for(int i = 1; i <= n * m; i++)
     {
         if(vis[i]) continue;
         findCycle(i);
