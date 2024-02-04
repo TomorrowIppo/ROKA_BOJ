@@ -34,7 +34,7 @@ int main()
         graph[x].push_back(y);
         graph[y].push_back(x);
     }
-    dfs(p1);
+    dfs(p1, p2, 0);
     if(!isFounded) cout << -1;
     else cout << ans;
 
@@ -44,11 +44,11 @@ int main()
 void dfs(int node, int end, int dist)
 {
     vis[node] = true;
-    if(node == p2) { isFounded = true; return; }
+    if(node == end) { isFounded = true; ans = dist; return; }
 
     for(int nxt : graph[node])
     {
         if(vis[nxt]) continue;  // 재방문 방지
-        dfs(nxt);
+        dfs(nxt, end, dist+1);
     }
 }
