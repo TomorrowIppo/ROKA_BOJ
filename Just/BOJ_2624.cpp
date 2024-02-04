@@ -2,6 +2,12 @@
 
 using namespace std;
 
+/*
+
+풀면서 느낀점 dp는 파도파도 끝이 없구나.
+
+*/
+
 int dp[10001];
 
 int main()
