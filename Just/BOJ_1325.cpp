@@ -1,9 +1,15 @@
 #include <bits/stdc++.h>
 #define MAX 10001
+#define X first
+#define Y second
 
 using namespace std;
 
-bool cmp(pair<int, int> p1, pair<int, int> p2) {}
+bool cmp(pair<int, int> p1, pair<int, int> p2) 
+{
+    if(p1.Y == p2.Y) return p1.X < p2.X;
+    return p2.Y < p1.Y;
+}
 void input();
 void dfs(int v, int dist);
 void resetArr();
@@ -16,7 +22,7 @@ bool vis[MAX];
 
 int main()
 {
-    ios::sync_with_stido(0);
+    ios::sync_with_stdio(0);
     cin.tie(0);
 
     input();
@@ -29,6 +35,14 @@ int main()
         cnt = 0;
     }
     // ans의 원소들을 비교해서 답 출력하는 부분 구현하기
+    sort(ans.begin(), ans.end(), cmp);
+
+    cout << ans[0].X << ' ';
+    for(int i = 1; i <= n; i++)
+    {
+        if(ans[i - 1].Y == ans[i].Y) { cout << ans[i].X << ' '; }
+        else break;
+    }
 
     return 0;
 }
@@ -46,12 +60,12 @@ void input()
 
 void dfs(int v, int dist)
 {
+    vis[v] = true;
     for(int nxt : graph[v])
     {
         if(vis[nxt]) continue;
         vis[nxt] = true;
         dfs(nxt, dist + 1);
-        vis[nxt] = false;
     } 
     cnt = max(cnt, dist);
 }
