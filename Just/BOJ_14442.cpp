@@ -12,7 +12,7 @@ typedef struct
 } dataSet;
 
 int N, M, K;
-int board[MAX][MAX];
+char board[MAX][MAX];
 int dist[MAX][MAX][11];
 int dx[4] = {-1, 0, 1, 0};
 int dy[4] = {0, -1, 0, 1};
@@ -32,7 +32,7 @@ int main()
         cin >> tmp;
         for(int j = 0; j < M; j++)
         {
-            board[i][j] = (int)tmp[j];
+            board[i][j] = tmp[j];
         }
     }
 
@@ -64,7 +64,7 @@ int bfs(int x, int y, int k)
 
             if(nx < 0 || ny < 0 || nx >= N || ny >= M) continue;    // 범위를 벗어나면 스킵
 
-            if(board[nx][ny] == 1)  // 이동하려는 곳이 벽일 때
+            if(board[nx][ny] == '1')  // 이동하려는 곳이 벽일 때
             {
                 if(cur.k >= K) continue;   // 벽을 부술 수 있는 횟수를 초과했다면 스킵
                 if(dist[nx][ny][cur.k + 1] >= 0) continue;   // 이미 지났다면 스킵
