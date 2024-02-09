@@ -18,6 +18,11 @@
 
 이 테스트 케이스만 고치면 정답일 것 같다. 내일 고쳐보자.
 
+=> BOJ_14442 방식으로 진행하다가, 밤에 벽을 만난 경우를 처리할 때, 거리 + 1이 중복으로 적용될 수 있음을 발견
+
+무조건 int dist[]을 통해 방문여부 + 이동거리를 동시에 할 필요 없이
+그냥 queue에 이동거리를 같이 넣어주는 방식도 좋은 듯 하다. 상황에 따라 유동적으로 할 수 있도록 준비하자.
+
 */
 
 using namespace std;
@@ -25,18 +30,19 @@ using namespace std;
 typedef struct
 {
     int x;  
-    int y;  
+    int y;
+    int dist;
     int breakCnt;   // 벽 부순 횟수
     bool isDayTime; // 낮 여부
 }dataSet;
 
 int N, M, K;
 char board[MAX][MAX];
-int dist[MAX][MAX][11];
+bool vis[MAX][MAX][11];
 int dx[4] = {-1, 0, 1, 0};
 int dy[4] = {0, -1, 0, 1};
 
-void bfs(int x, int y, int k, bool daytime);
+void bfs(int x, int y, int dist, int k, bool daytime);
 
 int main()
 {
@@ -55,85 +61,58 @@ int main()
         }
     }
 
-    for(int i = 0; i < N; i++)
-        for(int j = 0; j < M; j++)
-            for(int k = 0; k <= K; k++)
-                dist[i][j][k] = -1;
-
     // 로직
-    bfs(0, 0, 0, true);
+    bfs(0, 0, 1, 0, true);
 
     return 0;
 }
 
-void bfs(int x, int y, int k, bool daytime)
+void bfs(int x, int y, int dist, int k, bool daytime)
 {
-    int ret = INF;
     queue<dataSet> q;
-    q.push({x, y, k, daytime});
-    dist[x][y][k] = 1;
+    q.push({x, y, dist, k, daytime});
+    vis[x][y][k] = true;
 
     // 탐색
     while(!q.empty())
     {
         auto cur = q.front(); q.pop();
-        if(cur.x == N - 1 && cur.y == M - 1) break;
-
-        if(!cur.isDayTime)   // 현재 밤일 때
+        if(cur.x == N - 1 && cur.y == M - 1) 
         {
-            int cantMoveCnt = 0;
-            for(int dir = 0; dir < 4; dir++)
-            {
-                int nx = cur.x + dx[dir];
-                int ny = cur.y + dy[dir];
+            cout << cur.dist;
+            return;
+        }
 
-                if(nx < 0 || ny < 0 || nx >= N || ny >= M) { cantMoveCnt++; continue; }    // 범위 넘어가면 스킵
-                if(dist[nx][ny][cur.breakCnt] >= 0 || board[nx][ny] == '1') { cantMoveCnt++; continue; }
+        for(int dir = 0; dir < 4; dir++)
+        {
+            int nx = cur.x + dx[dir];
+            int ny = cur.y + dy[dir];
+
+            if(nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
+
+            if(board[nx][ny] == '1')    // 벽일 경우
+            {
+                // 어짜피 현재 밤이고, 부술 수 있는 기회를 다 쓴 상태에서 벽을 만났을 때 하루 기다리고 dist + 1 하고 다시 탐색을 해봤자 의미가 없다. 최단거리가 아니게 되기 때문.
+                if(cur.breakCnt >= K) continue;
+                if(vis[nx][ny][cur.breakCnt + 1]) continue;
                 
-                q.push({nx, ny, cur.breakCnt, !cur.isDayTime});
-                dist[nx][ny][cur.breakCnt] = dist[cur.x][cur.y][cur.breakCnt] + 1;
-            }
-
-            if(cantMoveCnt == 4) 
-            {
-                q.push({cur.x, cur.y, cur.breakCnt, !cur.isDayTime});
-                dist[cur.x][cur.y][cur.breakCnt] += 1;
-            }
-        }
-        else    // 현재 낮일 때
-        {
-            for(int dir = 0; dir < 4; dir++)
-            {
-                int nx = cur.x + dx[dir];
-                int ny = cur.y + dy[dir];
-
-                if(nx < 0 || ny < 0 || nx >= N || ny >= M) continue;    // 범위 넘어가면 스킵
-
-                if(board[nx][ny] == '1')  // 이동하려는 곳이 벽일 때
+                if(cur.isDayTime)   // 낮인 경우
                 {
-                    if(cur.breakCnt >= K) continue;   // 벽을 부술 수 있는 횟수를 초과했다면 스킵
-                    if(dist[nx][ny][cur.breakCnt + 1] >= 0) continue;   // 이미 지났다면 스킵
-                    
-                    q.push({nx, ny, cur.breakCnt + 1, !cur.isDayTime});
-                    dist[nx][ny][cur.breakCnt + 1] = dist[cur.x][cur.y][cur.breakCnt] + 1;
+                    q.push({nx, ny, cur.dist + 1, cur.breakCnt + 1, !cur.isDayTime});
+                    vis[nx][ny][cur.breakCnt + 1] = true;
                 }
-                else    // 이동하려는 곳이 길일 때
+                else    // 밤인 경우
                 {
-                    if(dist[nx][ny][cur.breakCnt] >= 0) continue;
-                    q.push({nx, ny, cur.breakCnt, !cur.isDayTime});
-                    dist[nx][ny][cur.breakCnt] = dist[cur.x][cur.y][cur.breakCnt] + 1;
+                    q.push({cur.x, cur.y, cur.dist + 1, cur.breakCnt, !cur.isDayTime});
                 }
             }
-        }
+            else    // 길인 경우
+            {
+                if(vis[nx][ny][cur.breakCnt]) continue;
+                q.push({nx, ny, cur.dist + 1, cur.breakCnt, !cur.isDayTime});
+                vis[nx][ny][cur.breakCnt] = true;
+            }
+        }   
     }
-
-    // 답 출력
-    for(int i = 0; i <= K; i++)
-    {
-        if(dist[N - 1][M - 1][i] == -1) continue;
-        ret = min(ret, dist[N - 1][M - 1][i]);
-    }
-    if(ret == INF) ret = -1;
-
-    cout << ret;
+    cout << -1;
 }
