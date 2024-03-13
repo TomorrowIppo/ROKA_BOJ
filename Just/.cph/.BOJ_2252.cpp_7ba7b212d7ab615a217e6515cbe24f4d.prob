@@ -1,0 +1,1 @@
+{"name":"Local: BOJ_2252","url":"/workspaces/ROKA_BOJ/Just/BOJ_2252.cpp","tests":[{"id":1710371028001,"input":"3 2\n1 3\n2 3","output":"1 2 3"},{"id":1710371034850,"input":"4 2\n4 2\n3 1","output":"4 2 3 1"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/workspaces/ROKA_BOJ/Just/BOJ_2252.cpp","group":"local","local":true}
