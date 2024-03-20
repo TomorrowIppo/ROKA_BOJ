@@ -4,10 +4,11 @@
 using namespace std;
 
 void solve();
-void reset();
+void resetParams();
 
 int n, k, w;
 int indegree[MAX];
+int dp[MAX];
 vector<int> graph[MAX];
 int time_taken[MAX];
 
@@ -20,6 +21,8 @@ int main()
     cin >> t;
     while(t--)
     {
+        resetParams();
+
         cin >> n >> k;
         // 건물당 건설 소요 시간
         for(int i = 1; i <= n; i++)
@@ -35,9 +38,7 @@ int main()
         // 승리하기 위해 건설해야 할 건물 번호
         cin >> w;
         
-
         solve();
-        reset();
     }
 
     return 0;
@@ -45,10 +46,32 @@ int main()
 
 void solve()
 {
+    // indegree cnt = 0인 것을 큐에 push
+    queue<int> q;
+    for(int i = 1; i <= n; i++)
+        if(indegree[i] == 0) q.push(i);
+    
+    // dp와 time_taken 매치시켜서 basis 설정
+    for(int i = 1; i <= n; i++)
+        dp[i] = time_taken[i];
 
+    // 탐색
+    while(!q.empty())  
+    {
+        auto cur = q.front(); q.pop();
+        if(cur == w) { cout << dp[cur] << '\n'; break; }
+
+        for(auto nxt : graph[cur])
+        {
+            dp[nxt] = max(dp[nxt], dp[cur] + time_taken[nxt]);  // vertex에 올 때마다, 최댓값으로 갱신
+
+            indegree[nxt]--;
+            if(indegree[nxt] == 0) q.push(nxt);
+        }
+    }
 }
 
-void reset()
+void resetParams()
 {
-    for(int i = 1; i <= n; i++) { time_taken[i] = 0; indegree[i] = 0; }
+    for(int i = 1; i <= n; i++) { time_taken[i] = 0; indegree[i] = 0; dp[i] = 0; graph[i].clear(); }
 }
