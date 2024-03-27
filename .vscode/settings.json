@@ -3,6 +3,7 @@
     "files.associations": {
         "map": "cpp",
         "complex": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "random": "cpp"
     }
 }
