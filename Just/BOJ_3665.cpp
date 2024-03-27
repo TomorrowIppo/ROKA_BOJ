@@ -14,6 +14,7 @@ void resetParams();
 2 -> 1
 로 다 연결 한 다음, 갱신하기
 
++) interator 안쓰고 풀려고 하다가 틀리지 말고 그냥 곱게 interator 쓰자 병진아 원트클 못했다 이거때문에
 */
 
 int t, n, m;
