@@ -12,13 +12,14 @@ using namespace std;
 */
 
 void TopologicalSort();
-void dfs(int node, int depth);
+int dfs(int u);
 
 int n, m, s, e;
-vector<pair<int, int>> graph[MAX];  // node, time
+vector<pair<int, int>> graph[MAX];              // node, time
+vector<pair<int, int>> reverse_graph[MAX];      // 백트래킹을 위한 그래프
 int indegree[MAX];
 int longest_dist[MAX];
-bool vis[MAX][MAX];
+bool vis[MAX];
 int cnt;
 
 int main()
@@ -32,24 +33,15 @@ int main()
         int u, v, t;
         cin >> u >> v >> t;
         graph[u].push_back({v, t});
+        reverse_graph[v].push_back({u, t});
         indegree[v]++;
     }
     cin >> s >> e;
 
     TopologicalSort();
-    dfs(1, 0);
+    cnt = dfs(e);
 
     cout << cnt;
-    
-    cout << endl;
-    for(int i = 1; i <= n; i++)
-    {
-        for(int j = 1; j <= m; j++)
-        {
-            cout << vis[i][j] << ' ';
-        }
-        cout << endl;
-    }
 
     return 0;
 }
@@ -76,16 +68,19 @@ void TopologicalSort()
     cout << longest_dist[e] << '\n';
 }
 
-void dfs(int node, int depth)
+int dfs(int u)
 {
-    if(node == e) { cnt += depth; return ; }
-
-    for(auto nxt : graph[node])
+    vis[u] = true;
+    int res = 0;
+    for(auto nxt : reverse_graph[u])
     {
-        if(longest_dist[nxt.V] - longest_dist[node] == nxt.T)
+        int v = nxt.V; int t = nxt.T;
+        if(longest_dist[u] == longest_dist[v] + t)
         {
-            if(vis[node][nxt.V]) dfs(nxt.V, depth);
-            else { vis[node][nxt.V] = true; dfs(nxt.V, depth + 1); }
+            res++;
+            if(!vis[v]) res += dfs(v);
         }
     }
+
+    return res;
 }
