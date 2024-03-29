@@ -12,13 +12,13 @@ using namespace std;
 */
 
 void TopologicalSort();
-void dfs(int node, int len);
+void dfs(int node, int depth);
 
 int n, m, s, e;
 vector<pair<int, int>> graph[MAX];  // node, time
 int indegree[MAX];
 int longest_dist[MAX];
-bool vis[MAX];
+bool vis[MAX][MAX];
 int cnt;
 
 int main()
@@ -40,6 +40,16 @@ int main()
     dfs(1, 0);
 
     cout << cnt;
+    
+    cout << endl;
+    for(int i = 1; i <= n; i++)
+    {
+        for(int j = 1; j <= m; j++)
+        {
+            cout << vis[i][j] << ' ';
+        }
+        cout << endl;
+    }
 
     return 0;
 }
@@ -66,17 +76,16 @@ void TopologicalSort()
     cout << longest_dist[e] << '\n';
 }
 
-void dfs(int node, int len)
+void dfs(int node, int depth)
 {
-    vis[node] = true;
+    if(node == e) { cnt += depth; return ; }
+
     for(auto nxt : graph[node])
     {
-        if(longest_dist[node] - nxt.T == longest_dist[nxt.V])
+        if(longest_dist[nxt.V] - longest_dist[node] == nxt.T)
         {
-            cnt++;
-            
-            if(vis[nxt.V]) continue;
-            dfs(nxt.V, len + nxt.T);
+            if(vis[node][nxt.V]) dfs(nxt.V, depth);
+            else { vis[node][nxt.V] = true; dfs(nxt.V, depth + 1); }
         }
     }
 }
