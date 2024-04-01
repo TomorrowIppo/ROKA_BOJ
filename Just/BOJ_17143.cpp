@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #define MAX 101
-#define R first
-#define C second
+#define X first
+#define Y second
 
 using namespace std;
 
@@ -42,13 +42,15 @@ void input()
     {
         int r, c, s, d, z;
         cin >> r >> c >> s >> d >> z;
-        Shark[r][c] = {s, d ,z};
+        board[r][c] = {s, d ,z};
         coord.push_back({r, c});
     }
 }
 
 void solve()
 {
+    if(M == 0) { cout << 0; return ; }
+
     for(int hunter_pos = 1; hunter_pos <= C; hunter_pos++)
     {
         gotcha(hunter_pos);
@@ -75,13 +77,14 @@ void gotcha(int c)
 void simulate()
 {
     vector<pii>::iterator iter;
-    int r = *iter.R
-    int c = *iter.C
+    iter = coord.begin();
+    int r = iter->X;
+    int c = iter->Y;
     for(iter = coord.begin(); iter != coord.end(); )
     {
-        int board[r][c].speed = spd;
-        int board[r][c].direction = d;
-        int board[r][c].size = sz;
+        int spd = board[r][c].speed;
+        int d = board[r][c].direction;
+        int sz = board[r][c].size;
 
         // 기록된 좌표의 상어 값이 {0, 0, 0}이란 것은 죽었단 것을 의미 by 낚시꾼
         if(spd == 0 && d == 0 && sz == 0)
@@ -113,13 +116,13 @@ void move(int r, int c, int spd, int d)
             if(dir)
             {
                 space = cur_r - 1;
-                if(move_cnt < space) break;
+                if(move_cnt <= space) break;
                 cur_r = 0;
             }
             else
             {
                 space = R - cur_r;
-                if(move_cnt < space) break;
+                if(move_cnt <= space) break;
                 cur_r = R;
             }
         }
@@ -128,13 +131,13 @@ void move(int r, int c, int spd, int d)
             if(dir)
             {
                 space = cur_c - 1;
-                if(move_cnt < space) break;
+                if(move_cnt <= space) break;
                 cur_c = 0;
             }
             else
             {
                 space = C - cur_c;
-                if(move_cnt < space) break;
+                if(move_cnt <= space) break;
                 cur_c = C;
             }
         }
@@ -147,7 +150,12 @@ void move(int r, int c, int spd, int d)
         int n_r = cur_r + ((dir) ? -1 : 1) * move_cnt;
         if(board[n_r][c].speed != 0 || board[n_r][c].direction != 0 || board[n_r][c].size != 0) // 가려고 하는 칸에 다른 상어가 이미 존재했을 때
         {
-
+            if(board[r][c].size > board[n_r][c].size)
+            {
+                board[n_r][c].speed = board[r][c].speed;
+                board[n_r][c].direction = (dir) ? 1 : 2; 
+                board[n_r][c].size = board[r][c].size;
+            }
         }
     }
     else    // RIGHT & LEFT
@@ -155,8 +163,16 @@ void move(int r, int c, int spd, int d)
         int n_c = cur_c + ((dir) ? -1 : 1) * move_cnt;
         if(board[r][n_c].speed != 0 || board[r][n_c].direction != 0 || board[r][n_c].size != 0) // 가려고 하는 칸에 다른 상어가 이미 존재했을 때
         {
-
+            if(board[r][c].size > board[r][n_c].size)
+            {
+                board[r][n_c].speed = board[r][c].speed;
+                board[r][n_c].direction = (dir) ? 4 : 3; 
+                board[r][n_c].size = board[r][c].size;
+            }
         }
     }
-
+    // 기존 위치 제거
+    board[r][c].speed = 0;
+    board[r][c].direction = 0; 
+    board[r][c].size = 0;
 }
