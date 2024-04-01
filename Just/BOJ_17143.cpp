@@ -17,7 +17,7 @@ void input();
 void solve();
 void gotcha(int c);
 void simulate();
-void move(int r, int c, int spd, int d);
+void move(vector<pii> &v, int idx, int spd, int d);
 
 int R, C, M;
 int gotcha_size;
@@ -92,7 +92,8 @@ void simulate()
             iter = coord.erase(iter);
             continue;
         }
-        move(r, c, spd, d);
+        int idx = distance(coord.begin(), iter);
+        move(coord, idx, spd, d);
 
         iter++;
     }
@@ -101,11 +102,13 @@ void simulate()
 // move를 O(N) 미만의 시간으로 구현할 방법이 없을까
 // (+) 방향으로 남은 칸의 개수 : R or C - cur
 // (-) 방향으로 남은 칸의 개수 : cur - 1
-void move(int r, int c, int spd, int d)
+void move(vector<pii> &v, int idx, int spd, int d)
 {
     int move_cnt = spd;
-    int cur_r = r;
-    int cur_c = c;
+    int cur_r = v[idx].X;
+    int cur_c = v[idx].Y;
+    int r = v[idx].X;
+    int c = v[idx].Y;
     bool dir = (d % 3 == 1);  // 1(-) 2(+) 3(+) 4(-) 3의 차이를 갖는다. true : (-), false : (+)
 
     while(move_cnt == 0)
@@ -150,12 +153,24 @@ void move(int r, int c, int spd, int d)
         int n_r = cur_r + ((dir) ? -1 : 1) * move_cnt;
         if(board[n_r][c].speed != 0 || board[n_r][c].direction != 0 || board[n_r][c].size != 0) // 가려고 하는 칸에 다른 상어가 이미 존재했을 때
         {
-            if(board[r][c].size > board[n_r][c].size)
+            if(board[r][c].size > board[n_r][c].size)   // 가려고 하는 칸에 있었던 상어보다 내가 더 클 때
             {
                 board[n_r][c].speed = board[r][c].speed;
                 board[n_r][c].direction = (dir) ? 1 : 2; 
                 board[n_r][c].size = board[r][c].size;
+
+                v[idx].X = n_r;
             }
+            else    // 내가 먹힐 때
+            {
+                coord.erase(coord.begin() + idx);
+            }
+        }
+        else
+        {
+            board[n_r][c].speed = board[r][c].speed;
+            board[n_r][c].direction = (dir) ? 1 : 2; 
+            board[n_r][c].size = board[r][c].size;
         }
     }
     else    // RIGHT & LEFT
@@ -163,14 +178,27 @@ void move(int r, int c, int spd, int d)
         int n_c = cur_c + ((dir) ? -1 : 1) * move_cnt;
         if(board[r][n_c].speed != 0 || board[r][n_c].direction != 0 || board[r][n_c].size != 0) // 가려고 하는 칸에 다른 상어가 이미 존재했을 때
         {
-            if(board[r][c].size > board[r][n_c].size)
+            if(board[r][c].size > board[r][n_c].size)   // 가려고 하는 칸에 있었던 상어보다 내가 더 클 때
             {
                 board[r][n_c].speed = board[r][c].speed;
                 board[r][n_c].direction = (dir) ? 4 : 3; 
                 board[r][n_c].size = board[r][c].size;
+
+                v[idx].Y = n_c;
+            }
+            else    // 내가 먹힐 때
+            {
+                coord.erase(coord.begin() + idx);
             }
         }
+        else
+        {
+            board[r][n_c].speed = board[r][c].speed;
+            board[r][n_c].direction = (dir) ? 4 : 3; 
+            board[r][n_c].size = board[r][c].size;    
+        }
     }
+
     // 기존 위치 제거
     board[r][c].speed = 0;
     board[r][c].direction = 0; 
