@@ -3,6 +3,8 @@
 
 using namespace std;
 
+/* 분명 죽인 상어가 다시 살아나고, 문제 제출할 때마다 Out of Bounds가 떠서 머리 깨졌던 문제. 고작 159번 라인 한 줄 때문에 그랬던 문제. 9시간 날아간 문제. */
+
 typedef struct 
 {
     int id;
