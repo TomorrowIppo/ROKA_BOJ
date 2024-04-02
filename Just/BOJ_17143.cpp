@@ -13,6 +13,8 @@ typedef struct
     int size;
 }Shark_Info;
 
+char debug[8] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+
 void input();
 void solve();
 void gotcha(int c);
@@ -133,6 +135,7 @@ void move()
                 c = nc;
             }
         }
+
         Shark[i].R = r;
         Shark[i].C = c;
         Shark[i].direction = dir;
@@ -151,7 +154,7 @@ void killing()
                 sort(MAP[i][j].begin(), MAP[i][j].end(), cmp);
                 int survive_idx = MAP[i][j][0];
 
-                for(int k = 1; j < MAP[i][j].size(); k++)
+                for(int k = 1; k < MAP[i][j].size(); k++)
                 {
                     Shark[MAP[i][j][k]].size = 0;
                     Shark[MAP[i][j][k]].R = 0;
@@ -159,7 +162,7 @@ void killing()
                 }
 
                 MAP[i][j].clear();
-                MAP[i][j].push_back(Shark[survive_idx].id);
+                MAP[i][j].push_back(survive_idx);
             }
         }
     }
@@ -184,8 +187,8 @@ void printShark()
     {
         for(int j = 1; j <= C; j++)
         {
-            if(MAP[i][j].size() == 0) cout << "0 ";
-            else cout << "S ";
+            if(MAP[i][j].size() == 0) cout << ".  ";
+            else cout << "S" << debug[MAP[i][j][0]] << " ";
         }
         cout << endl;
     }
