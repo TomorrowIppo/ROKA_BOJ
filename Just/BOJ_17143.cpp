@@ -154,7 +154,7 @@ void killing()
                 sort(MAP[i][j].begin(), MAP[i][j].end(), cmp);
                 int survive_idx = MAP[i][j][0];
 
-                for(int k = 1; k < MAP[i][j].size(); k++)
+                for(int k = 1; k < MAP[i][j].size(); k++)   // k < MAP[i][j].size(); 여기에서 k를 j로 두고 이 한줄 때문에 맞왜틀 9시간 시전한 사람이 있다? ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
                 {
                     Shark[MAP[i][j][k]].size = 0;
                     Shark[MAP[i][j][k]].R = 0;
