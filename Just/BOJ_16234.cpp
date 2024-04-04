@@ -12,11 +12,11 @@ typedef struct
 }Coord;
 
 void solve();
-void openGate();
+void FloodFill(int x, int y, int num);
 
 int N, L, R;
-bool flag = false;
 int board[MAX][MAX];
+int UnionArea[MAX][MAX];
 bool vis[MAX][MAX];
 int dx[4] = {-1, 0, 1, 0};
 int dy[4] = {0, -1, 0, 1};
@@ -41,27 +41,46 @@ int main()
 void solve()
 {
     int cnt = 0;
-    while(flag)
+    while(true)
     {
-        openGate();
+        value.push_back(0);
+        int num = 1;
+        for(int i = 0; i < N; i++)
+            for(int j = 0; j < N; j++)
+            {
+                if(vis[i][j]) continue;
+                FloodFill(i, j, num);
+                num++;
+            }
+
+        if(num >= N*N + 1) { cout << cnt; return ; }
+
+        for(int i = 0; i < N; i++)
+            for(int j = 0; j < N; j++)
+                board[i][j] = value[UnionArea[i][j]];
 
         // reset
         for(int i = 0; i < N; i++)
             for(int j = 0; j < N; j++)
+            {
                 vis[i][j] = false;
-        
+                UnionArea[i][j] = 0;
+            }
+
         cnt++;
+        value.clear();
     }
-    cout << cnt;
 }
 
-void openGate()
+void FloodFill(int x, int y, int num)
 {
     queue<Coord> q;
-    queue<Coord> update;
-    q.push({0, 0});
-    vis[0][0] = true;
-    value.push_back(board[0][0]);
+    q.push({x, y});
+    vis[x][y] = true;
+    UnionArea[x][y] = num;
+
+    int sum = board[x][y];
+    int cnt = 1;
 
     while(!q.empty())
     {
@@ -78,16 +97,15 @@ void openGate()
             int dist = abs(board[cur.x][cur.y] - board[nx][ny]);
             if(L <= dist && dist <= R)
             {
-                value.push_back(board[nx][ny]);
+                sum += board[nx][ny];
+                cnt++;
                 q.push({nx, ny});
                 vis[nx][ny] = true;
+                UnionArea[nx][ny] = num;
             }
         }
     }
 
-    int aver = 0;
-    for(int i = 0; i < value.size(); i++)
-        aver += value[i];
-    
-    aver = (aver / value.size());
+    int res = sum / cnt;
+    value.push_back(res);
 }
