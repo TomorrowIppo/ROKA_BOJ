@@ -18,12 +18,18 @@ void union_root(int x, int y)
     x = find_root(x);
     y = find_root(y);
 
-    // 서로 다른 트리에 속한다면, 한 쪽의 트리를 다른 쪽에 붙인다.
-    if(x != y) parent[x] = y;
+    // 서로 다른 트리에 속한다면, 루트 번호가 큰 쪽이 작은 쪽으로 붙도록 설정한다. (반대도 상관없음)
+    // 이렇게 설정하지 않으면 시간초과 날 확률 Up
+    if(x != y)
+    {
+        if(x > y) parent[x] = y;
+        else parent[y] = x;
+    }
 }
 
-bool find_root(int x, int y)
+bool isUnion(int x, int y)
 {
+    // 둘이 같은 집합인지 판단
     x = find_root(x);
     y = find_root(y);
     if(x == y) return true;
@@ -45,9 +51,9 @@ int main()
     union_root(7, 8);
 
     // 1과 5는 연결되어있지 않지만, 1과 6을 연결해도 6과 5는 같은 집합이기에, 같이 연결된다.
-    cout << "1과 5는 연결 되어 있나 ? : " << (find_root(1, 5) ? "True" : "False") << '\n';
+    cout << "1과 5는 연결 되어 있나 ? : " << (isUnion(1, 5) ? "True" : "False") << '\n';
     union_root(1, 6);
-    cout << "1과 5는 연결 되어 있나 ? : " << (find_root(1, 5) ? "True" : "False") << '\n';
+    cout << "1과 5는 연결 되어 있나 ? : " << (isUnion(1, 5) ? "True" : "False") << '\n';
 
     return 0;
 }
