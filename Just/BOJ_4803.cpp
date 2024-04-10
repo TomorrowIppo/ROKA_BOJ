@@ -17,12 +17,10 @@ int count_tree()
 {
     int res = 0;
     vector<int> root;
-    sort(parent, parent + n);
-
-    int pin = parent[1];
-    root.push_back(pin);
-    for(int i = 2; i <= n; i++)
-        if(pin != parent[i]) { pin = parent[i]; root.push_back(pin); }
+    
+    // parent[i]가 갱신안 되어 있더라도 루트 노드는 i == parent[i]를 성립
+    for(int i = 1; i <= n; i++)
+        if(i == parent[i]) root.push_back(i);
 
     for(auto nxt : root)
         if(!isCycle[nxt]) res++;
