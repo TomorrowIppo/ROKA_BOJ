@@ -1,3 +1,5 @@
+// https://sangwoo0727.github.io/algorithm/Algorithm-UnionFind/
+
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -9,7 +11,7 @@ int find_root(int x)
     // x가 root이면 그대로 반환
     if(x == parent[x]) return x;
     // x가 자식일 경우 부모 노드에 대해 재귀
-    return find_root(parent[x]);
+    return parent[x] = find_root(parent[x]);    // 경로 압축 O(n) -> O(α(n)), 사실상 상수 시간 복잡도
 }
 
 void union_root(int x, int y)
