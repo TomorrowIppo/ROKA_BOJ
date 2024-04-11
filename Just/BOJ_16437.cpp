@@ -3,39 +3,27 @@
 
 using namespace std;
 
-typedef struct
-{
-    char species;
-    int cnt;
-}dataSet;
+typedef long long ll
 
-int n, res;
-dataSet tree[MAX];
+int n
+ll res;
 vector<int> adj[MAX];
-queue<int> q;
-bool vis[MAX];
 
-void dfs(int cur, int cnt)
+ll island[MAX];
+
+ll dfs(int cur, ll cnt)
 {
-    if(cur == 1) { res += cnt; return ; }
-
+    vis[cur] = true;
     for(auto nxt : adj[cur])
     {
         if(vis[nxt]) continue;  // 재방문 방지
-
-        int calc = (tree[nxt].species == 'W') ? (cnt - tree[nxt].cnt) : cnt;
-
-        if(tree[nxt].species == 'W')
-        {
-            if(cnt >= tree[nxt].cnt) tree[nxt].cnt = 0;
-            else tree[nxt].cnt -= cnt;
-
-            if(calc <= 0) return ;  // 늑대를 만나고 모두 다 잡아먹혔을 때
-        }
         
-        vis[nxt] = true;
+        
+        ll calc = cnt + island[nxt];
+
+        if(cnt >= island[nxt]) island[nxt] = 0;
+        
         dfs(nxt, calc);
-        vis[nxt] = false;
     }
 }
 
@@ -48,25 +36,16 @@ int main()
     cin >> n;
     for(int u = 2; u <= n; u++)
     {
-        char s; int cnt; int v;
+        char s; ll cnt; int v;
         cin >> s >> cnt >> v;
 
-        if(s == 'S') q.push(u);  // 초기 양의 위치 저장
-        
-        tree[u] = {s, cnt};
+        if(s == 'W') cnt = -cnt;
+
+        island[u] = cnt;
         adj[u].push_back(v);
-        adj[v].push_back(u);
     }
 
-    // solve
-    while(!q.empty())
-    {
-        auto cur = q.front(); q.pop();
-
-        vis[cur] = true;
-        dfs(cur, tree[cur].cnt);
-        vis[cur] = false;
-    }
+    res = dfs(1, 0);
     cout << res;
 
     return 0;
