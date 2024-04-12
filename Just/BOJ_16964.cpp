@@ -3,35 +3,23 @@
 
 using namespace std;
 
-typedef struct
-{
-    int node;
-    int depth;
-}dataSet;
-
 int n;
+int idx = 1;
 vector<int> adj[MAX];
-vector<int> lv[MAX];
-int cmp[MAX];
+int dfs_path[MAX];
+int order[MAX];
 bool vis[MAX];
 
-void bfs(int node)
+bool cmp(int a, int b) { return dfs_path[a] < dfs_path[b]; }
+
+void dfs(int node)
 {
-    queue<dataSet> q;
-    q.push({node, 1});
     vis[node] = true;
-
-    while(!q.empty())
+    dfs_path[idx++] = node;
+    for(auto nxt : adj[node]) 
     {
-        auto cur = q.front(); q.pop();
-
-        lv[cur.depth].push_back(cur.node);
-        for(auto nxt : adj[cur.node])
-        {
-            if(vis[nxt]) continue;
-            vis[nxt] = true;
-            q.push({nxt, cur.depth + 1});
-        }
+        if(vis[nxt]) continue;
+        dfs(nxt);
     }
 }
 
@@ -50,17 +38,19 @@ int main()
         adj[v].push_back(u);
     }
     for(int i = 1; i <= n; i++)
-        cin >> cmp[i];
+    {
+        cin >> order[i];
+        dfs_path[order[i]] = i;
+    }
+    if(order[1] != 1) { cout << 0; return 0; }
+
+    for(int i = 1; i <= n; i++) sort(adj[i].begin(), adj[i].end(), cmp);
 
     // solve
-    bfs(1); // 계층방문을 통해, 각 계층별 노드 저장
-    for(int i = 1; i <= n; i++) 
-    {   
-        cout << "Lv." << i << ": ";
-        for(auto nxt : lv[i])
-            cout << nxt << ' ';
-        cout << '\n';
-    }
+    dfs(1); // 계층방문을 통해, 각 계층별 노드 저장
+    for(int i = 1; i <= n; i++)
+        if(order[i] != dfs_path[i]) { cout << 0; return 0; }
+    cout << 1;
 
     return 0;
 }
