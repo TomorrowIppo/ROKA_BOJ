@@ -3,28 +3,31 @@
 
 using namespace std;
 
-typedef long long ll
+typedef long long ll;
 
-int n
+int n;
 ll res;
 vector<int> adj[MAX];
-
 ll island[MAX];
 
-ll dfs(int cur, ll cnt)
+ll dfs(int cur)
 {
-    vis[cur] = true;
+    if(adj[cur].size() == 0)
+    {
+        if(island[cur] > 0) return island[cur];
+        else return 0;
+    }
+
+    ll sum = 0;
+    sum += island[cur];
+
     for(auto nxt : adj[cur])
     {
-        if(vis[nxt]) continue;  // 재방문 방지
-        
-        
-        ll calc = cnt + island[nxt];
-
-        if(cnt >= island[nxt]) island[nxt] = 0;
-        
-        dfs(nxt, calc);
+        sum += dfs(nxt);
     }
+
+    if(sum < 0) return 0;
+    return sum;
 }
 
 int main()
@@ -42,10 +45,10 @@ int main()
         if(s == 'W') cnt = -cnt;
 
         island[u] = cnt;
-        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
 
-    res = dfs(1, 0);
+    res = dfs(1);
     cout << res;
 
     return 0;
