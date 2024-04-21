@@ -16,7 +16,7 @@
 - 이분탐색 : $O(logN)$
 - 투 포인터 : $O(N)$<br/><br/><br/><br/>
 
-# :rocket:코테 정수론 실압근
+# :rocket:PS 정수론 실압근
 - 에라토스테네스의 체 : $O(Nlog(logN))$
     -
     소수를 판별할 때 사용<br/>
@@ -69,7 +69,7 @@
     int LCM(int a, int b, int gcd) { return (a * b) / gcd; }
     ```
 <br/><br/><br/><br/>
-# :rocket:코테 조합론 실압근
+# :rocket:PS 조합론 실압근
 
 - 순열
     -
@@ -144,3 +144,5 @@
         }
     }
     ```
+<br/><br/><br/><br/>
+# :rocket:PS 기하학 실압근
