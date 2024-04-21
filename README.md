@@ -19,7 +19,7 @@
 # :rocket:코테 정수론 실압근
 - 에라토스테네스의 체 : $O(Nlog(logN))$
     -
-    <br/> 소수를 판별할 때 사용<br/><br/>
+    소수를 판별할 때 사용<br/>
     ```
     void primeNumberSieve()
     {
