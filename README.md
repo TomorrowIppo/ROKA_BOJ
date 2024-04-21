@@ -18,7 +18,8 @@
 
 # :rocket:코테 정수론 실압근
 - 에라토스테네스의 체 : $O(Nlog(logN))$
-<br/> 소수를 판별할 때 사용<br/><br/>
+    -
+    <br/> 소수를 판별할 때 사용<br/><br/>
     ```
     void primeNumberSieve()
     {
@@ -47,10 +48,12 @@
     }
     - by Dgos
     ```
-- 오일러의 피 : $O(NlogN)$, 소수에 대한 전처리(에라토스테네스의 체)가 돼있다면 $O(N^{\frac{1}{2}})$<br/><br/>
+- 오일러의 피 : $O(NlogN)$
+    -
+    소수에 대한 전처리(에라토스테네스의 체)가 돼있다면 $O(N^{\frac{1}{2}})$<br/><br/>
 - 최대공약수(GCD) : $O(logN)$
-<br/> 유클리드 호제법(Euclidean Algorithm)을 이용. a를 b로 나눈 나머지를 r이라고 할 때 (단, a > b) a와 b의 최대 공약수는 b와 r의 최대 공약수와 같다 즉,$$gcd(a, b) = gcd(b, r)$$
-r = 0이라면, a, b의 최대공약수는 b가 된다.
+    -
+    유클리드 호제법(Euclidean Algorithm)을 이용. a를 b로 나눈 나머지를 r이라고 할 때 (단, a > b) a와 b의 최대 공약수는 b와 r의 최대 공약수와 같다 즉,$$gcd(a, b) = gcd(b, r)$$
     ```
     int GCD(int a, int b)
     { 
@@ -58,10 +61,86 @@ r = 0이라면, a, b의 최대공약수는 b가 된다.
         else return GCD(b, a % b);
     }
     ```
-<br/><br/>
+    r = 0이라면, a, b의 최대공약수는 b가 된다.<br/><br/>
+
 - 최소공배수(LCM) : $O(log(N + M))$
+    -
     ```
     int LCM(int a, int b, int gcd) { return (a * b) / gcd; }
     ```
 <br/><br/><br/><br/>
 # :rocket:코테 조합론 실압근
+
+- 순열
+    -
+1. ***순열*** : 순서를 따지고, 중복을 허용하지 않는다. (순서 O, 중복 X) $_{n}^{}P_{r}^{} = \frac{n!}{(n - r)!}$
+    ```
+    int pArr[r] = { 0, };
+    bool check[n + 1] = { false, }; 
+
+    void permutation(int depth){
+        if(depth == r){
+            printArray(pArr);
+            return;
+        }
+        
+        for(int i = 1; i <= n; i++){
+            if(!check[i]){
+                check[i] = true;
+                pArr[depth] = i;
+                permutation(depth + 1);
+                check[i] = false;
+            }
+        }
+    }
+    ```
+    <br/>2. ***중복순열*** : 순서를 따지고, 중복을 허용한다. (순서 O, 중복 O) $_{n}^{}\pi_{r}^{} = n^r$
+    ```
+    int dpArr[r] = { 0, };
+
+    void duplicatePermutation(int depth){
+        if(depth == r){
+            printArray(dpArr);
+            return;
+        }
+
+        for(int i = 1; i <= n; i++){
+            dpArr[depth] = i;
+            duplicatePermutation(depth + 1);
+        }
+    }
+    ```
+- 조합
+    -
+1. ***조합*** : 순서를 따지지도 않고, 중복을 허용하지 않는다. (순서 X, 중복 X) $_{n}^{}C_{r}^{} = \frac{n!}{r!(n - r)!}$
+    ```
+    int cArr[r] = { 0, };
+
+    void combination(int depth, int next){
+        if(depth == r){
+            printArray(cArr);
+            return;
+        }
+
+        for(int i = next; i <= n; i++){
+            cArr[depth] = i;
+            combination(depth + 1, i + 1);
+        }
+    }
+    ```
+    <br/>2. ***중복조합*** : 순서를 따지지도 않고, 중복을 허용한다. (순서 X, 중복 O) $_{n}^{}H_{r}^{} = _{n + r - 1}^{}C_{r}^{}$
+    ```
+    int dcArr[r] = { 0, };
+
+    void duplicateCombination(int depth, int next){
+        if(depth == r){
+            printArray(dcArr);
+            return;
+        }
+
+        for(int i = next; i <= n; i++){
+            dcArr[depth] = i;
+            duplicateCombination(depth + 1, i);
+        }
+    }
+    ```
