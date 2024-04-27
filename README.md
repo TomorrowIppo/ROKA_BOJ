@@ -31,7 +31,7 @@
 - 0-1 Knapsack Problem
 ### Tree DP
 - 간선의 관계를 이용하는 유형 ([BOJ_7812](https://www.acmicpc.net/problem/7812), [BOJ_20188](https://www.acmicpc.net/problem/20188))
-![TreeDP_1](./IMG_0012.png)  
+![TreeDP_1](./IMG_0012.jpeg)  
 ### Graph DP
 ### LIS
 ### LCS
