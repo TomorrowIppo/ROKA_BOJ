@@ -34,13 +34,12 @@
 
 ```mermaid
 stateDiagram
-    [*] --> Still
-    Still --> [*]
-
-    Still --> Moving
-    Moving --> Still
-    Moving --> Crash
-    Crash --> [*]
+    [A] --> [B]
+    [B] --> [C]
+    [B] --> [D]
+    [C] --> [E]
+    [C] --> [F]
+    [D] --> [G]
 ```
 ### Graph DP
 ### LIS
