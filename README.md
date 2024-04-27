@@ -2,7 +2,7 @@
 전역(23.05.30 ~ 24.11.29)하기 전까지 백준 문제 풀기 및 유형 정리<br/><br/><br/><br/>
 
 # :rocket:알고리즘 시간복잡도 실압근
-### STL
+### C++ STL
 - 중복 제거(unique) : unique 자체는 $O(N)$이지만, erase(unique()) 형태면 $O(NM)$
 <br/> 기본 형태 : ***v1.erase(unique(v1.begin(), v1.end()), v1.end());***
 
