@@ -30,17 +30,28 @@
 ### Knapsack Problem
 - 0-1 Knapsack Problem
 ### Tree DP
-- 간선의 관계를 이용하는 유형 ([BOJ_7812](https://www.acmicpc.net/problem/7812), [BOJ_20188](https://www.acmicpc.net/problem/20188))
+- 임의의 간선을 지나는 횟수를 이용하는 유형 ([BOJ_7812](https://www.acmicpc.net/problem/7812), [BOJ_20188](https://www.acmicpc.net/problem/20188))
 
 ```mermaid
-stateDiagram
-    A --- B 
-    B --- C
-    B --- D
-    C --- E
-    C --- F
-    D --- G
-```
+graph TD
+    A(["A"]) --- B(["B"]) 
+    B(["B"]) --- C(["C"])
+    B(["B"]) --- D(["D"])
+    C(["C"]) --- E(["E"])
+    C(["C"]) --- F(["F"])
+    D(["D"]) --- G(["G"])
+``` 
+A가 루트인 트리에서 임의의 한 정점으로부터 다른 모든 정점까지의 거리의 합을 구하기<br/>
+(N : 정점의 개수, weight : 간선의 길이, subTree[x] : x가 루트인 서브트리의 정점 개수)
+    
+우선, basis로 쓸 dist[A]를 누적합으로 미리 구한다.
+
+B to Others를 구할 때 C를 제외한 나머지 간선들의 방문 횟수와 C to Others를 구할 때 B를 제외한 나머지 간선들의 방문 횟수는 일치한다. 
+B to Others 기준 B-C를 지나는 횟수는 subTree[C], C to Others 기준 B-C를 지나는 횟수는 N - subTree[C]이므로 DFS로 구현하면 점화식은 다음과 같다.
+
+    dist[child] = dist[parent] + (N - 2 * subTree[child]) * weight
+    
+
 ### Graph DP
 ### LIS
 ### LCS
