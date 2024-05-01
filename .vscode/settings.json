@@ -21,6 +21,8 @@
         "bitset": "cpp",
         "utility": "cpp",
         "ostream": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "cmath": "cpp",
+        "tuple": "cpp"
     }
 }
