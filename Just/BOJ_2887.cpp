@@ -1,19 +1,18 @@
 #include <bits/stdc++.h>
 #define MAX 100001
 
+#define dist first
+#define num second
+
 using namespace std;
 
 typedef long long ll;
-typedef struct 
-{
-    ll x;
-    ll y;
-    ll z;
-}Coord;
 
 int n;
 vector<tuple<ll, int, int>> edges;
-vector<Coord> Coords;
+vector<pair<int, int>> xvec;
+vector<pair<int, int>> yvec;
+vector<pair<int, int>> zvec;
 int parent[MAX];
 
 int find_root(int x)
@@ -49,23 +48,19 @@ int main()
 
         ll x, y, z;
         cin >> x >> y >> z;
-        Coords.push_back({x, y, z});
+        xvec.push_back({x, i});
+        yvec.push_back({y, i});
+        zvec.push_back({z, i});
     }
+    sort(xvec.begin(), xvec.end());
+    sort(yvec.begin(), yvec.end());
+    sort(zvec.begin(), zvec.end());
 
-    for(int i = 1; i < n; i++)
+    for(int i = 0; i < n - 1; i++)
     {
-        for(int j = i + 1; j <= n; j++)
-        {
-            Coord c1 = Coords[i - 1];
-            Coord c2 = Coords[j - 1];
-
-            ll dx = abs(c1.x - c2.x);
-            ll dy = abs(c1.y - c2.y);
-            ll dz = abs(c1.z - c2.z);
-
-            ll dist = min(dx, min(dy, dz));
-            edges.push_back({dist, i, j});
-        }
+        edges.push_back({xvec[i + 1].dist - xvec[i].dist, xvec[i].num, xvec[i + 1].num});
+        edges.push_back({yvec[i + 1].dist - yvec[i].dist, yvec[i].num, yvec[i + 1].num});
+        edges.push_back({zvec[i + 1].dist - zvec[i].dist, zvec[i].num, zvec[i + 1].num});
     }
     sort(edges.begin(), edges.end());
 
