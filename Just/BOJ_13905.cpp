@@ -2,6 +2,7 @@
 #define MAX 100001
 #define V first
 #define W second
+#define INF 987654321
 
 using namespace std;
 
@@ -13,6 +14,11 @@ vector<tuple<int, int, int>> edges;
 int parent[MAX];
 vector<pair<int, ll>> adj[MAX];
 bool vis[MAX];
+
+bool cmp(tuple<int, int, int> a, tuple<int, int ,int> b)
+{
+    return (get<0>(a) > get<0>(b));
+}
 
 int find_root(int x)
 {
@@ -45,7 +51,7 @@ void dfs(int cur, ll dist)
     for(auto nxt : adj[cur])
     {
         if(vis[nxt.V]) continue;
-        dfs(nxt.V, dist + nxt.W);
+        dfs(nxt.V, min(dist, nxt.W));
     }
 }
 
@@ -64,10 +70,9 @@ int main()
         cin >> u >> v >> w;
         edges.push_back({w, u, v});
     }
-    sort(edges.begin(), edges.end());
+    sort(edges.begin(), edges.end(), cmp);
 
     int cnt = 0;
-    ll sum = 0LL;
     for(auto nxt : edges)
     {
         int u, v, w;
@@ -79,11 +84,11 @@ int main()
         adj[u].push_back({v, w});
         adj[v].push_back({u, w});
 
-        cnt++; sum += w;
+        cnt++;
         if(cnt == n - 1) break;
     }
-    dfs(s, 0);
-    cout << ans << ' ' << sum;
+    dfs(s, INF);
+    cout << ans;
 
     return 0;
 }
