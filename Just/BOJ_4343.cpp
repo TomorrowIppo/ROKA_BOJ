@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#define MAX 101
+#define MAX 501
 
 using namespace std;
 
@@ -49,10 +49,10 @@ int main()
     {   
         // input
         cin >> s >> p;
-        for(int i = 1; i <= n; i++) parent[i] = i;  // Union-Find를 위한 사전작업
+        for(int i = 1; i <= p; i++) parent[i] = i;  // Union-Find를 위한 사전작업
 
         // 좌표입력
-        for(int i = 0; i < p; i++)
+        for(int i = 1; i <= p; i++)
         {
             ll x, y;
             cin >> x >> y;
@@ -84,9 +84,7 @@ int main()
 
             merge(u, v);
             cnt++;
-            ans += dist;
-
-            if(cnt == s - 1) break;
+            if(cnt == p - s) { ans = dist; break; }
         }
         cout.precision(2);
         cout << fixed << ans << '\n';
