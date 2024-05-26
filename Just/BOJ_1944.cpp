@@ -1,8 +1,6 @@
 #include <bits/stdc++.h>
 #define MAX 251
 #define endl "\n"
-#define X first
-#define Y second
 
 using namespace std;
 
@@ -12,18 +10,11 @@ typedef struct
     int y;
 }Coord;
 
-typedef struct
-{
-    int v;
-    int w;
-}Edge;
-
 int n, m;
 int parent[MAX];
 int dx[4] = {-1, 0, 1, 0};
 int dy[4] = {0, -1, 0, 1};
 vector<tuple<int, int, int>> edges;
-vector<Edge> adj[MAX];
 vector<Coord> coords; 
 char board[51][51];
 int vis[MAX][51][51];
@@ -105,7 +96,7 @@ int main()
     }
 
     // bfs로 edge 구하기
-    for(int i = 1; i <= vertex_num; i++)
+    for(int i = 1; i < vertex_num; i++)
         bfs(coords[i - 1].x, coords[i - 1].y, i);
 
     // test
