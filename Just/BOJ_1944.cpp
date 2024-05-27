@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#define MAX 251
+#define MAX 252
 #define endl "\n"
 
 using namespace std;
@@ -17,6 +17,7 @@ int dy[4] = {0, -1, 0, 1};
 vector<tuple<int, int, int>> edges;
 vector<Coord> coords; 
 char board[51][51];
+bool vis_edge[MAX][MAX];
 int vis[MAX][51][51];
 int id[51][51];
 
@@ -47,7 +48,12 @@ void bfs(int x, int y, int k)
 
         if(board[cur.x][cur.y] == 'S' || board[cur.x][cur.y] == 'K')
         {
-            if(k != id[cur.x][cur.y]) edges.push_back({vis[k][cur.x][cur.y], k, id[cur.x][cur.y]});
+            if(k != id[cur.x][cur.y] && !vis_edge[id[cur.x][cur.y]][k]) 
+            {
+                edges.push_back({vis[k][cur.x][cur.y], k, id[cur.x][cur.y]});
+                vis_edge[id[cur.x][cur.y]][k] = true;
+                vis_edge[k][id[cur.x][cur.y]] = true;
+            }
         }
         
         for(int dir = 0; dir < 4; dir++)
