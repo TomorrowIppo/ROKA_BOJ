@@ -9,8 +9,10 @@ void topological_sort();
 
 int n, m, k;
 int indegree[MAX];
+bool vis[MAX];
 vector<int> adj[MAX];
 vector<int> res;
+int recipe[MAX];
 vector<int> default_stuff;
 
 int main()
@@ -28,26 +30,23 @@ void input()
 {
      // input
     cin >> n >> m;
-    for(int i = 0; i < m; i++)
+    for(int i = 1; i <= m; i++)
     {
         int len, to;
-        vector<int> tmp;
-        
+
         cin >> len;
         for(int j = 0; j < len; j++)
         {
-            int inp;
-            cin >> inp;
-            tmp.push_back(inp);
+            int x;
+            cin >> x;
+            adj[x].push_back(i);
+            indegree[i]++;
         }
-        cin >> to;
 
-        for(auto nxt : tmp)
-        {
-            adj[nxt].push_back(to);
-            indegree[to]++;
-        }
+        cin >> to;
+        recipe[i] = to;
     }
+
     cin >> k;
     for(int i = 0; i < k; i++)
     {
@@ -59,36 +58,33 @@ void input()
 
 void topological_sort()
 {
-    // 하나의 물약을 만드는 방법이 2개 이상일 수 있다는 반례 때문에
-    // 밑의 코드는 사용 불가능. 입력받은 레시피를 하나의 그래프로 합치는 것이 아닌,
-    // 레시피별로 각각의 그래프로 분류해서 위상정렬해야할 듯
+    queue<int> q;
+    for(auto nxt : default_stuff) 
+    {
+        if(!vis[nxt]) { res.push_back(nxt); q.push(nxt); vis[nxt] = true; }
+    }
+
+    while(!q.empty())
+    {
+        auto cur = q.front(); q.pop();
+
+        for(auto nxt : adj[cur])
+        {
+            indegree[nxt]--;
+
+            if(indegree[nxt] == 0)
+            {
+                if(!vis[recipe[nxt]])
+                {
+                    res.push_back(recipe[nxt]);
+                    q.push(recipe[nxt]);
+                    vis[recipe[nxt]] = true;
+                }
+            }
+        }
+    }   
+
+    sort(res.begin(), res.end());
+    cout << res.size() << endl;
+    for(auto nxt : res) cout << nxt << " ";
 }
-
-// void topological_sort()
-// {
-//     queue<int> q;
-//     for(auto nxt : default_stuff) 
-//     {
-//         q.push(nxt);
-//         if(indegree[nxt] == 0) res.push_back(nxt);
-//     }
-
-//     while(!q.empty())
-//     {
-//         auto cur = q.front(); q.pop();
-
-//         for(auto nxt : adj[cur])
-//         {
-//             indegree[nxt]--;
-
-//             if(indegree[nxt] == 0) { q.push(nxt); res.push_back(nxt); }
-//         }
-//     }
-
-//     for(auto nxt : default_stuff)
-//         if(indegree[nxt] != 0) res.push_back(nxt);   
-
-//     sort(res.begin(), res.end());
-//     cout << res.size() << endl;
-//     for(auto nxt : res) cout << nxt << " ";
-// }
