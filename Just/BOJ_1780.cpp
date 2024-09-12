@@ -36,6 +36,7 @@ void dc(int n, int x, int y)
     }
     else
     {
+        
         if(init_value == -1) cnt_++;
         else if(init_value == 0) cnt_0++;
         else cnt_1++;
