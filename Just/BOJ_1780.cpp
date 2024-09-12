@@ -13,8 +13,8 @@ void dc(int n, int x, int y)
     bool is_all_same = true;
     int init_value = board[x][y];
 
-    for(int i = 0; i < n; i++)
-        for(int j = 0; j < n; j++)
+    for(int i = x; i < x + n; i++)
+        for(int j = y; j < y + n; j++)
             if(board[i][j] != init_value) 
             {
                 is_all_same = false;
