@@ -9,6 +9,7 @@ typedef struct
 {
     ll x;
     ll y;
+    int num;
 }Point;
 
 int n, m;
@@ -32,10 +33,12 @@ int find_root(int x)
     return parent[x] = find_root(parent[x]);
 }
 
+// merge랑 is_same_group에서 x = find_root(x), y = find_root(y)가 아닌 x = parent[x], y = parent[y]로 해놓고 있었다
+// 근데 이상하게 예제는 다 맞아서 이상함을 눈치채지 못했다
 void merge(int x, int y)
 {
-    x = parent[x];
-    y = parent[y];
+    x = find_root(x);
+    y = find_root(y);
 
     if(x > y) parent[x] = y;
     else parent[y] = x;
@@ -43,8 +46,8 @@ void merge(int x, int y)
 
 bool is_same_group(int x, int y)
 {
-    x = parent[x];
-    y = parent[y];
+    x = find_root(x);
+    y = find_root(y);
 
     return x == y;
 }
@@ -76,9 +79,8 @@ int main()
     {
         ll x, y;
         cin >> x >> y;
-        points.push_back({x, y});
+        points.push_back({x, y, i});
     }
-    // sort(points.begin(), points.end(), cmp); sort하면 기존의 번호가 사라짐
 
     // Union-Find를 통해 사이클 발생하지 않은 경우에는 MST의 cnt 개수 -1 아니면 그냥 스킵
     for(int i = 0; i < m; i++)
@@ -92,6 +94,7 @@ int main()
             merge(u, v);
         }
     }
+    sort(points.begin(), points.end(), cmp);
 
     // 임의의 두 점 사이에 있는 점들이 처음 두 점과 일직선 상에 있는지 검사 후 edges에 push_back (여기 다시 구현하기)
     for(int i = 0; i < n; i++)
@@ -111,7 +114,7 @@ int main()
                 if(dir == 0) is_able_line = false;
             }
             
-            if(is_able_line) edges.push_back({get_cost(p1, p2), i + 1, j + 1});
+            if(is_able_line) edges.push_back({get_cost(p1, p2), p1.num, p2.num});
         }
     }
     sort(edges.begin(), edges.end(), greater<>());
