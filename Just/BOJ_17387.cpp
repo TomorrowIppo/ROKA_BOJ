@@ -8,6 +8,15 @@ using namespace std;
 typedef long long ll;
 typedef pair<ll, ll> pii;
 
+bool compare(pii p1, pii p2)
+{
+    if(p1.X == p2.X)
+    {
+        return p1.Y <= p2.Y;
+    }
+    else return p1.X <= p2.X;
+}
+
 ll ccw(pii center, pii p1, pii p2)
 {
     ll det = (p1.X - center.X) * (p2.Y - center.Y);
@@ -31,8 +40,19 @@ int main()
     ll cmp3 = ccw(p1, p3, p4);
     ll cmp4 = ccw(p2, p3, p4);
 
-    if(cmp1 == 0LL || cmp2 == 0LL || cmp3 == 0LL || cmp4 == 0LL) cout << '0' << endl;   // 세 점이 일직선상에 위치한 경우
-    else if(cmp1 * cmp2 < 0LL && cmp3 * cmp4 < 0LL) cout << '1' << endl;
+    if(cmp1 * cmp2 <= 0LL && cmp3 * cmp4 <= 0LL)
+    {
+        if(cmp1 * cmp2 == 0LL && cmp3 * cmp4 == 0LL)
+        {
+            if(compare(p1, p2)) swap(p1, p2);
+            if(compare(p3, p4)) swap(p3, p4);
+
+            // 선이 일직선상에 있을 때, l1 가장 큰 점 l2 가장 작은 점, l1 가장 작은 점 l2 가장 큰 점 비교를 용이하게 하기 위해서
+            if(compare(p4, p1) && compare(p2, p3)) cout << '1' << endl;
+            else cout << '0' << endl;
+        }
+        else cout << '1' << endl;
+    }
     else cout << '0' << endl;
 
     return 0;

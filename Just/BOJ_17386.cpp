@@ -1,21 +1,21 @@
 #include <bits/stdc++.h>
+#define X first
+#define Y second
+#define endl "\n"
 
 using namespace std;
 
 typedef long long ll;
-typedef struct
-{
-    int x;
-    int y;
-}Point;
+typedef pair<ll, ll> pii;
 
-int ccw(Point p1, Point p2, Point p3)
+ll ccw(pii center, pii p1, pii p2)
 {
-    ll det = (p2.x-p1.x) * (p3.y-p1.y) - (p2.y-p1.y) * (p3.x-p1.x);
-    
-    if(det > 0) return 1;       // 반시계방향
-    else if(det < 0) return -1; // 시계방향
-    else return 0;              // 세 점이 일직선상에 놓여있음
+    ll det = (p1.X - center.X) * (p2.Y - center.Y);
+    det -= (p1.Y - center.Y) * (p2.X - center.X);
+
+    if(det > 0LL) return 1LL;   // 반시계 방향
+    else if(det == 0LL) return 0LL; // 일직선상
+    else return -1LL; // 시계 방향
 }
 
 int main()
@@ -23,15 +23,17 @@ int main()
     ios::sync_with_stdio(0);
     cin.tie(0);
 
-    Point P1, P2, P3, P4;
-    int x1, x2, x3, x4;
-    int y1, y2, y3, y4;
-    cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3 >> x4 >> y4;
+    pii p1, p2, p3, p4;
+    cin >> p1.X >> p1.Y >> p2.X >> p2.Y >> p3.X >> p3.Y >> p4.X >> p4.Y;
 
-    // 1. 서로 교차할 때
-    // 2. 서로 교차하지 않을 때
-    // 3-1. 서로 일직선상에 있지만, 포개어지지 않을 때
-    // 3-2. 서로 일직선상에 있찌만, 포개어질 때
+    ll cmp1 = ccw(p3, p1, p2);
+    ll cmp2 = ccw(p4, p1, p2);
+    ll cmp3 = ccw(p1, p3, p4);
+    ll cmp4 = ccw(p2, p3, p4);
+
+    if(cmp1 == 0LL || cmp2 == 0LL || cmp3 == 0LL || cmp4 == 0LL) cout << '0' << endl;   // 세 점이 일직선상에 위치한 경우
+    else if(cmp1 * cmp2 < 0LL && cmp3 * cmp4 < 0LL) cout << '1' << endl;
+    else cout << '0' << endl;
 
     return 0;
 }
