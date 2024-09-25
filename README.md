@@ -17,6 +17,9 @@
 - 투 포인터 : $O(N)$<br/><br/><br/><br/>
 
 # :rocket:문제 유형 실압근
+## CCW
+- ccw 정리하기
+
 ## Graph
 ### Flood Fill
 ### 위상정렬(Topological Sort)
@@ -54,4 +57,3 @@ B to Others 기준 B-C를 지나는 횟수는 subTree[C], C to Others 기준 B-C
 
 ### Graph DP
 ### LIS
-### LCS
