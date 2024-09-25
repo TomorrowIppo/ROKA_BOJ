@@ -18,7 +18,7 @@
 
 # :rocket:문제 유형 실압근
 ## CCW
-- CCW(Counter Clock Wise)
+- CCW(Counter Clock Wise) ([BOJ_2162](https://www.acmicpc.net/problem/2162), [BOJ_17386](https://www.acmicpc.net/problem/17386), [BOJ_17387](https://www.acmicpc.net/problem/17387))
 
 ![alt text](image-4.png)
 
@@ -41,7 +41,7 @@ D, A, B는 $\overrightarrow{DA}$ x $\overrightarrow{AB}$ 결과 Z축 계수가 �
 
 즉, CCW(C, A, B) * CCW(D, A, B) <= 0을 만족하니 두 직선은 교차한다 볼 수 있다.
 
-![alt text](image-3.png)
+![alt text](image-2.png)
 
 하지만, 위와 같은 경우 CCW(A, C, D) * CCW(B, C, D) <= 0을 만족하지만, 교차하지 않는다. 즉,  한 직선을 통해서만 교차 여부를 파악하는 것이 아닌,  다른 직선을 통해서도 교차 여부를 파악해야한다. CCW(C, A, B) * CCW(D, A, B) <= 0을 만족하지 않으므로 결과적으로  $\overline{AB}$와  $\overline{CD}$는 서로 교차하지 않는다.
 
