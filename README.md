@@ -9,7 +9,7 @@
 ### Graph & Search
 - DFS / BFS : $O(V + E)$
 - 위상정렬 : $O(V + E)$
-- Union-Find : 기본적으로 Find 함수에 의해 시간복잡도가 좌우되며, $O(logN)$, 최악의 경우 $O(N)$이다. 
+- Union-Find : 기본적으로 Find 함수에 의해 시간복잡도가 좌우되며, 경로압축 기준 $O(a(N))$, 거의 상수 시간 복잡도를 가진다고 봐도 무방하다.
 
 ### Data Structure
 - 우선순위 큐 : 삽입, 삭제, front 가져오기 $O(logN)$
@@ -18,7 +18,40 @@
 
 # :rocket:문제 유형 실압근
 ## CCW
-- ccw 정리하기
+- CCW(Counter Clock Wise)
+
+![alt text](image-4.png)
+
+CCW (Counter Clock Wise)는 2차원 평면 위에 놓인 3개의 점에 대해서 어떤 방향성이 있는지 알려주며 이 방향성 정보를 사용해 선분이 서로 교차하는지 판단하게 된다. 일반적으로 CCW 함수는 다음과 같이 구현된다.
+```mermaid
+int ccw(Point p1, Point p2, Point p3)
+{
+    ll det = (p2.x - p1.x) * (p3.y - p1.y);
+    det -= (p2.y - p1.y) * (p3.x - p1.x);
+
+    if(det > 0LL) return 1;
+    else if(det == 0LL) return 0;
+    else return -1;
+}
+```
+우선, $\overline{AB}$ 기준에서 교차 여부를 확인해보겠다. </br>
+C, A, B의 관계는 $\overrightarrow{CA}$ x $\overrightarrow{AB}$을 해보면 Z축 계수가 음수임을 알 수 있고, 이는 곧 오른손 법칙에 의해 시계 관계임을 알 수 있다.
+D, A, B는 $\overrightarrow{DA}$ x $\overrightarrow{AB}$ 결과 Z축 계수가 양수가 나오고 이는 곧, 반시계 관계임을 알 수 있다. 또한, 세 점이 직선상에 놓일 경우 Z축의 계수는 0이 나온다.<br/>
+우리는 Z축 계수의 값은 필요없고 세 점의 관계에 대한 정보만 필요하니 반시계일 경우는 1, 직선상에 놓이면 0, 시계면 -1을 리턴한다.
+
+즉, CCW(C, A, B) * CCW(D, A, B) <= 0을 만족하니 두 직선은 교차한다 볼 수 있다.
+
+![alt text](image-3.png)
+
+하지만, 위와 같은 경우 CCW(A, C, D) * CCW(B, C, D) <= 0을 만족하지만, 교차하지 않는다. 즉,  한 직선을 통해서만 교차 여부를 파악하는 것이 아닌,  다른 직선을 통해서도 교차 여부를 파악해야한다. CCW(C, A, B) * CCW(D, A, B) <= 0을 만족하지 않으므로 결과적으로  $\overline{AB}$와  $\overline{CD}$는 서로 교차하지 않는다.
+
+즉, 
+```CCW(A, C, D) * CCW(B, C, D) <= 0 && CCW(C, A, B) * CCW(D, A, B) <= 0```를 만족해야 두 선이 교차한다 볼 수 있다. 하지만 우린 또 하나의 예외처리를 해줘야 한다.
+</br></br></br>
+![alt text](image-5.png)
+</br></br></br></br>
+![alt text](image-6.png)
+```CCW(A, C, D) * CCW(B, C, D) == 0 && CCW(C, A, B) * CCW(D, A, B) == 0```인 경우인데, A좌표와 B좌표 중 가장 큰 값과 C좌표와 D좌표 중 가장 큰 값이, 서로의 작은 값보다 크면 교차한다. 즉, A좌표와 B좌표 중 가장 큰 값을 B로, C좌표와 D좌표 중 가장 큰 값을 D로 둘 때 ```B >= C && D >= A```를 만족하면 교차한다. 
 
 ## Graph
 ### Flood Fill
