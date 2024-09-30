@@ -23,7 +23,7 @@
 ![alt text](image-4.png)
 
 CCW (Counter Clock Wise)는 2차원 평면 위에 놓인 3개의 점에 대해서 어떤 방향성이 있는지 알려주며 이 방향성 정보를 사용해 선분이 서로 교차하는지 판단하게 된다. 일반적으로 CCW 함수는 다음과 같이 구현된다.
-```mermaid
+```
 int ccw(Point p1, Point p2, Point p3)
 {
     ll det = (p2.x - p1.x) * (p3.y - p1.y);
