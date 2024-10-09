@@ -5,9 +5,20 @@
 
 using namespace std;
 
+/*
+
+Floyd-Warshall을 통해 ligth to heavy 그래프와 heavy to light 그래프에서의 dist 배열을 만든다.
+각각 dist[Start]와 reverse_dist[Start]를 순회해서 0 or INF가 아닌 값의 개수가 
+자기보다 앞 혹은 뒤에있는 구슬의 개수이다. 
+
+이 개수가 (n - 1) / 2 보다 크다면 중앙에 위치할 수 없다는 뜻이다.
+
+*/
+
 int n, m;
-int dist[MAX][MAX];
-int reverse_dist[MAX][MAX];
+int dist[MAX][MAX]; // [Start][End]
+bool disable[MAX];
+int reverse_dist[MAX][MAX]; // [Start][End]
 
 int main()
 {
@@ -42,18 +53,31 @@ int main()
             for(int j = 1; j <= n; j++)
             {
                 dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
-                reverse_dist[i][j] = min(reverse_dist[i][j], reverse_dist[i][k] + reverse_dist[k][j]);
+                reverse_dist[j][i] = min(reverse_dist[j][i], reverse_dist[j][k] + reverse_dist[k][i]);
             }
     
     for(int i = 1; i <= n; i++)
     {
+        int tmp = 0;
         for(int j = 1; j <= n; j++)
-        {
-            if(reverse_dist[i][j] == INF) cout << 'x' << ' ';
-            else cout << reverse_dist[i][j] << ' ';
-        }
-        cout << endl;
+            if(dist[i][j] && dist[i][j] != INF) tmp++;
+        
+        if(tmp > remain) disable[i] = true;
     }
+    for(int i = 1; i <= n; i++)
+    {
+        int tmp = 0;
+        for(int j = 1; j <= n; j++)
+            if(reverse_dist[i][j] && reverse_dist[i][j] != INF) tmp++;
+        
+        if(tmp > remain) disable[i] = true;
+    }
+
+    for(int i = 1; i <= n; i++)
+    {
+        if(disable[i]) cnt++;
+    }
+    cout << cnt << endl;
 
     return 0;
 }
